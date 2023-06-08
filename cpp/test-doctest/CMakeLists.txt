@@ -1,6 +1,6 @@
 set(TEST_NAME sample_test_doctest)
 include(FetchContent)
-set(SOURCE_FILES main.cpp ExampleCharacterTestCase.cpp CharactersTest.cpp)
+set(SOURCE_FILES main.cpp ExampleCharacterTestCase.cpp CharactersTest.cpp CharacterParserTest.cpp)
 
 # Doctest
 FetchContent_Declare(

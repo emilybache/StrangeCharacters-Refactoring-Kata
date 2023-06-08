@@ -1,6 +1,6 @@
 set(TEST_NAME sample_test_gtest)
 include(FetchContent)
-set(SOURCE_FILES main.cpp ExampleCharacterTestCase.cpp CharactersTest.cpp)
+set(SOURCE_FILES main.cpp ExampleCharacterTestCase.cpp CharactersTest.cpp CharacterParserTest.cpp)
 
 # approvals
 FetchContent_Declare(

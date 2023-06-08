@@ -13,10 +13,13 @@ using namespace std;
 namespace Characters {
     class CharacterParser {
     public:
-        static void initializeFromFile(const string &filename);
-
+        static void initializeFromFile(const string& filename);
+        static optional<Character*> evaluatePath(const string& path);
     private:
-        std::vector<std::unique_ptr<Character>> allCharacters;
+        static vector<std::unique_ptr<Character>> allCharacters();
+        static optional<Character*> findCharacter(string_view firstName);
+        static optional<Character*> findCharacterWithFamily(vector<Character*> filteredCharacters, string_view tempPathWithoutCurlyBraces);
+        static vector<Character*> filterCharactersByFamilyName(string_view familyName, string_view characterName);
     };
 
 }

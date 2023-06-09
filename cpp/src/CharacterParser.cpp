@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -7,14 +6,13 @@
 #include "CharacterParser.h"
 #include "nlohmann/json.hpp"
 
-using namespace std;
 using json = nlohmann::json;
 
 namespace Characters {
-    vector<std::unique_ptr<Character>> CharacterParser::allCharacters;
+    std::vector<std::unique_ptr<Character>> CharacterParser::allCharacters;
 
-    void CharacterParser::initializeFromFile(const string &filename) {
-        std::ifstream data_stream(filename, ifstream::in);
+    void CharacterParser::initializeFromFile(const std::string &filename) {
+        std::ifstream data_stream(filename, std::ifstream::in);
         if (!data_stream.is_open()) {
             std::cout << "Error opening file:" << filename << '\n';
             std::cout << "Error: " << strerror(errno) << '\n';
@@ -56,11 +54,11 @@ namespace Characters {
         }
     }
 
-    std::optional<Character *> CharacterParser::evaluatePath(const string &path) {
+    std::optional<Character *> CharacterParser::evaluatePath(const std::string &path) {
         return std::nullopt;
     }
 
-    optional<Character*> CharacterParser::findCharacter(string_view firstName) {
+    std::optional<Character*> CharacterParser::findCharacter(std::string_view firstName) {
         auto c = std::find_if(allCharacters.begin(), allCharacters.end(),
                 [&](const auto& character) { return character->FirstName == firstName; });
 
@@ -69,14 +67,13 @@ namespace Characters {
         return std::nullopt;
     }
 
-    optional<Character *> CharacterParser::findCharacterWithFamily(vector<Character *> filteredCharacters,
-                                                                   string_view tempPathWithoutCurlyBraces) {
+    std::optional<Character*> CharacterParser::findCharacterWithFamily(std::vector<Character *> filteredCharacters,
+                                                                   std::string_view tempPathWithoutCurlyBraces) {
 
         return std::nullopt;
     }
 
-    vector<Character *>
-    CharacterParser::filterCharactersByFamilyName(string_view familyName, string_view characterName) {
-        return vector<Character *>();
+    std::vector<Character *>
+    CharacterParser::filterCharactersByFamilyName(std::string_view familyName, std::string_view characterName) {
     }
 }

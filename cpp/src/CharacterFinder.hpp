@@ -1,4 +1,5 @@
-#pragma once
+#ifndef STRANGECHARACTERS_REFACTORING_KATA_CHARACTERFINDER_HPP
+#define STRANGECHARACTERS_REFACTORING_KATA_CHARACTERFINDER_HPP
 
 #include <vector>
 #include <memory>
@@ -25,3 +26,5 @@ public:
 };
 
 }
+
+#endif

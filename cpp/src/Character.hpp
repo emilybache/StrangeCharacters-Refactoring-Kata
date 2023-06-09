@@ -1,4 +1,5 @@
-﻿#pragma once
+﻿#ifndef STRANGECHARACTERS_REFACTORING_KATA_CHARACTER_HPP
+#define STRANGECHARACTERS_REFACTORING_KATA_CHARACTER_HPP
 
 #include <optional>
 #include <string>
@@ -27,3 +28,5 @@ public:
 };
 
 }
+
+#endif

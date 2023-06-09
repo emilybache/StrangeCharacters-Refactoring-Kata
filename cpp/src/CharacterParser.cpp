@@ -69,6 +69,14 @@ namespace Characters {
 
     std::optional<Character*> CharacterParser::findCharacterWithFamily(std::vector<Character *> filteredCharacters,
                                                                    std::string_view tempPathWithoutCurlyBraces) {
+        auto firstName = tempPathWithoutCurlyBraces.substr(
+                tempPathWithoutCurlyBraces.find_last_of("/")+1
+                );
+
+        auto c = std::find_if(filteredCharacters.begin(), filteredCharacters.end(),
+                              [&firstName](const auto& character) { return character->FirstName == firstName; });
+        if (c != filteredCharacters.end())
+            return *c;
 
         return std::nullopt;
     }

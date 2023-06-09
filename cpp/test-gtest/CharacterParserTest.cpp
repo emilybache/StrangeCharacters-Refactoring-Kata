@@ -2,7 +2,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock-matchers.h>
 
-#include "CharacterParser.h"
+#include "CharacterParser.hpp"
 
 namespace Characters::Test {
 

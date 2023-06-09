@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "CharacterParser.h"
+#include "CharacterParser.hpp"
 
 namespace Characters::Test {
 

@@ -1,6 +1,6 @@
 #include "doctest/doctest.h"
 
-#include "CharacterParser.h"
+#include "CharacterParser.hpp"
 
 namespace Characters::Test {
 

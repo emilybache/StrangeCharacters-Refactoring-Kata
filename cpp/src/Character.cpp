@@ -25,7 +25,7 @@ void Character::AddChild(Character* child)
 
 void Character::SetNemesis(std::optional<Character*> monster)
 {
-    Nemesis = monster.has_value() ? *monster : nullptr;
+    Nemesis = monster;
 }
 
 

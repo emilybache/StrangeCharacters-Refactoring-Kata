@@ -13,7 +13,7 @@ public:
     const std::optional<std::string> LastName;
     const bool IsMonster;
 
-    Character* Nemesis = nullptr;
+    std::optional<Character*> Nemesis;
 
     std::set<Character*> children;
     std::set<Character*> siblings;

@@ -12,7 +12,7 @@ CharacterFinder::CharacterFinder(std::vector<std::unique_ptr<Character>> allChar
 std::optional<Character*> CharacterFinder::FindByFirstName(std::string_view name)
 {
     auto iterator = std::find_if(_allCharacters.begin(), _allCharacters.end(), [&](const auto& character) {
-      return character->FirstName == name; 
+      return character->FirstName == name;
     });
     if (iterator != _allCharacters.end())
     {
@@ -38,7 +38,7 @@ std::optional<Character*> CharacterFinder::FindParent(std::string_view firstName
         return std::nullopt;
     }
     auto parent = *((*child)->parents.begin());
-    
+
     // bug: return Monster instead of Jim
     if (parent->FirstName == "Jim")
     {
@@ -73,8 +73,8 @@ std::vector<Character*> CharacterFinder::FindFamilyByCharacter(std::string_view 
     //family.insert((*person)->siblings.begin(), (*person)->siblings.end());
 
     // bug: include Nemesis
-    if ((*person)->Nemesis)
-        family.insert((*person)->Nemesis);
+    if ((*person)->Nemesis.has_value())
+        family.insert((*person)->Nemesis.value());
     
     return std::vector<Character*>(family.begin(), family.end());
 }
@@ -94,9 +94,9 @@ std::vector<Character*> CharacterFinder::FindFamilyByLastName(std::optional<std:
     std::vector<Character*> nemeses;
     for (auto character : family)
     {
-        if (character->Nemesis)
+        if (character->Nemesis.has_value())
         {
-            nemeses.push_back(character->Nemesis);
+            nemeses.push_back(character->Nemesis.value());
         }
     }
     family.insert(family.end(), nemeses.begin(), nemeses.end());

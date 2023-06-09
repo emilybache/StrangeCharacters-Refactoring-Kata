@@ -5,7 +5,7 @@
 namespace Characters::Test {
 
     TEST_CASE("CharacterParser") {
-        CharacterParser::initializeFromFile("../strange_characters.json");
+        CharacterParser::initializeFromFile("../../strange_characters.json");
         SUBCASE("Find with empty path") {
             auto character = CharacterParser::evaluatePath("");
             REQUIRE(character.has_value() == false);

@@ -1,12 +1,28 @@
 #include <iostream>
 #include <string>
-#include <fstream>
 #include <sstream>
+#include <fstream>
+#include <regex>
 
 #include "CharacterParser.h"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
+
+namespace {
+    std::vector<std::string> split(std::string s, char delimiter)
+    {
+        std::vector<std::string> tokens;
+        std::string token;
+        std::istringstream tokenStream(s);
+        while (std::getline(tokenStream, token, delimiter))
+        {
+            if (!token.empty())
+                tokens.push_back(token);
+        }
+        return tokens;
+    }
+}
 
 namespace Characters {
     std::vector<std::unique_ptr<Character>> CharacterParser::allCharacters;
@@ -55,7 +71,76 @@ namespace Characters {
     }
 
     std::optional<Character *> CharacterParser::evaluatePath(const std::string &path) {
-        return std::nullopt;
+        std::optional<Character*> character = std::nullopt;
+
+        auto hasFamilyName = false;
+        auto characterName = std::string();
+        auto familyName = std::string();
+        auto tempPathWithoutCurlyBraces = std::string();
+        auto curlyBraces = std::string();
+
+        auto structureList = split(path, '/');
+
+        for (int i = structureList.size() - 1; i >= 0; --i)
+        {
+            auto localName = std::string();
+            auto localNameWithoutCurlyBraces = std::string();
+            auto familyLocalNameList = split(structureList[i], ':');
+            if (familyLocalNameList.size() == 2)
+            {
+                if (!hasFamilyName)
+                {
+                    familyName = familyLocalNameList[0];
+                    hasFamilyName = true;
+                }
+
+                familyName = familyLocalNameList[0];
+                localName = familyLocalNameList[1];
+            }
+            else if (familyLocalNameList.size() == 1)
+            {
+                localName = familyLocalNameList[0];
+            }
+
+            if (i == structureList.size() - 1)
+            {
+                characterName = localName;
+            }
+
+            localNameWithoutCurlyBraces = std::regex_replace(localName, std::regex("\\{[^{]*?\\}"), "");
+
+            auto matches = std::smatch { };
+
+            if (std::regex_match(localName, matches, std::regex("(.*)\\{([^{]*)\\}")))
+            {
+                curlyBraces = matches[2];
+                characterName = matches[1];
+            }
+
+            tempPathWithoutCurlyBraces = tempPathWithoutCurlyBraces.insert(0, "/" + localNameWithoutCurlyBraces);
+        }
+
+        if (!hasFamilyName)
+        {
+            character = findCharacter(characterName);
+            if (curlyBraces == "Nemesis")
+            {
+                return (*character)->Nemesis;
+            }
+            return character;
+        }
+
+        auto filteredCharacters = filterCharactersByFamilyName(familyName, characterName);
+        if (!filteredCharacters.empty())
+        {
+            character = findCharacterWithFamily(filteredCharacters, tempPathWithoutCurlyBraces);
+            if (curlyBraces == "Nemesis")
+            {
+                return (*character)->Nemesis;
+            }
+        }
+
+        return character;
     }
 
     std::optional<Character*> CharacterParser::findCharacter(std::string_view firstName) {

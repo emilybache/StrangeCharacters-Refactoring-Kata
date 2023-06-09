@@ -23,6 +23,12 @@ void Character::AddChild(Character* child)
     }
 }
 
+void Character::SetNemesis(std::optional<Character*> monster)
+{
+    Nemesis = monster.has_value() ? *monster : nullptr;
+}
+
+
 std::string to_string(const Character& character)
 {
     return "Character(" + character.FirstName + ", " + (character.LastName ? *character.LastName : "null") + ", isMonster:" + std::to_string(character.IsMonster) + ")";

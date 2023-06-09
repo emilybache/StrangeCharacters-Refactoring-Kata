@@ -60,7 +60,12 @@ namespace Characters {
         return std::nullopt;
     }
 
-    optional<Character *> CharacterParser::findCharacter(string_view firstName) {
+    optional<Character*> CharacterParser::findCharacter(string_view firstName) {
+        auto c = std::find_if(allCharacters.begin(), allCharacters.end(),
+                [&](const auto& character) { return character->FirstName == firstName; });
+
+        if (c != allCharacters.end())
+            return c->get();
         return std::nullopt;
     }
 

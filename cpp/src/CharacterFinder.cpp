@@ -1,5 +1,6 @@
 #include "CharacterFinder.hpp"
 #include "Character.hpp"
+#include <algorithm>
 
 namespace Characters {
 

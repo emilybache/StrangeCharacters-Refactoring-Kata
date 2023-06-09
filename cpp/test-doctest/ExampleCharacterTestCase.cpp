@@ -1,6 +1,7 @@
 #include "Character.hpp"
 #include "CharacterFinder.hpp"
 #include "doctest/doctest.h"
+#include <algorithm>
 
 namespace Characters::Test {
 

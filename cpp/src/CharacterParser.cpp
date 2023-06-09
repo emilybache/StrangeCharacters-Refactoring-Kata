@@ -28,6 +28,8 @@ namespace Characters {
     std::vector<std::unique_ptr<Character>> CharacterParser::allCharacters;
 
     void CharacterParser::initializeFromFile(const std::string &filename) {
+        allCharacters.clear();
+
         std::ifstream data_stream(filename, std::ifstream::in);
         if (!data_stream.is_open()) {
             std::cout << "Error opening file:" << filename << '\n';

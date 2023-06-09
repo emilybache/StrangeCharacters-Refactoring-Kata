@@ -60,7 +60,7 @@ namespace Characters {
 
     std::optional<Character*> CharacterParser::findCharacter(std::string_view firstName) {
         auto c = std::find_if(allCharacters.begin(), allCharacters.end(),
-                [&](const auto& character) { return character->FirstName == firstName; });
+                [&firstName](const auto& character) { return character->FirstName == firstName; });
 
         if (c != allCharacters.end())
             return c->get();
@@ -75,5 +75,17 @@ namespace Characters {
 
     std::vector<Character *>
     CharacterParser::filterCharactersByFamilyName(std::string_view familyName, std::string_view characterName) {
+        auto found = std::vector<Character*> { };
+        for (auto c = allCharacters.begin(); c != allCharacters.end(); ++c)
+            if ((*c)->LastName == familyName)
+                found.push_back(c->get());
+
+        if (std::any_of(found.begin(), found.end(),
+                [&characterName](const auto& character) { return character->FirstName == characterName; }))
+        {
+            return found;
+        }
+
+        return std::vector<Character*> { };
     }
 }

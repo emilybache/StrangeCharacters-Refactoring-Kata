@@ -13,7 +13,7 @@ public:
     const std::optional<std::string> LastName;
     const bool IsMonster;
 
-    Character* Nemesis = nullptr;
+    std::optional<Character*> Nemesis;
 
     std::set<Character*> children;
     std::set<Character*> siblings;
@@ -21,6 +21,7 @@ public:
 
     Character(std::string firstName, std::optional<std::string> lastName = std::nullopt, bool isMonster = false);
     void AddChild(Character* child);
+    void SetNemesis(std::optional<Character*> monster);
     friend std::string to_string(const Character& character);
     bool operator==(const Character& other) const;
 };

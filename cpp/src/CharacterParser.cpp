@@ -4,7 +4,7 @@
 #include <fstream>
 #include <regex>
 
-#include "CharacterParser.h"
+#include "CharacterParser.hpp"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;

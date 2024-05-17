@@ -32,15 +32,15 @@ public class CharacterParser {
 
         for (var characterData : data) {
             if (characterData.Nemesis != null) {
-                var nemesis = findCharacter(characterData.Nemesis);
-                var character = findCharacter(characterData.FirstName);
+                var nemesis = findCharacter(characterData.Nemesis, allCharacters);
+                var character = findCharacter(characterData.FirstName, allCharacters);
                 character.setNemesis(nemesis);
             }
 
             if (characterData.Children != null) {
-                var character = findCharacter(characterData.FirstName);
+                var character = findCharacter(characterData.FirstName, allCharacters);
                 for (var childName : characterData.Children) {
-                    var child = findCharacter(childName);
+                    var child = findCharacter(childName, allCharacters);
                     if (child != null)
                         character.addChild(child);
                 }
@@ -49,8 +49,8 @@ public class CharacterParser {
         characterFinder = new CharacterFinder(allCharacters);
     }
 
-    private static Character findCharacter(String firstName) {
-        return allCharacters.stream().filter(c -> c.firstName.equals(firstName)).findFirst().orElse(null);
+    private static Character findCharacter(String firstName, List<Character> allIncompleteCharacters) {
+        return allIncompleteCharacters.stream().filter(c -> c.firstName.equals(firstName)).findFirst().orElseThrow();
     }
 
     public static Character evaluatePath(String path) {
@@ -104,7 +104,7 @@ public class CharacterParser {
 
         if (!hasFamilyName)
         {
-            character = findCharacter(characterName);
+            character = characterFinder.findByFirstName(characterName);
             if (curlyBraces != null && curlyBraces.equals("Nemesis"))
             {
                 return character.getNemesis();

@@ -55,20 +55,4 @@ public class Character {
     return String.format("Character(%s, %s, %s)", firstName, lastName, isMonster ? "True" : "False");
   }
 
-  protected boolean equals(Character other) {
-    return firstName.equals(other.firstName);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (null == o) return false;
-    if (this == o) return true;
-    if (o.getClass() != this.getClass()) return false;
-    return equals((Character) o);
-  }
-
-  @Override
-  public int hashCode() {
-    return firstName.hashCode();
-  }
 }

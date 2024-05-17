@@ -11,10 +11,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static java.util.stream.Collectors.toList;
-
 public class CharacterParser {
     private static List<Character> allCharacters = new ArrayList();
+    private static CharacterFinder characterFinder;
 
     public static void InitializeFromFile(String filename) throws IOException {
         if (filename == null) {
@@ -47,6 +46,7 @@ public class CharacterParser {
                 }
             }
         }
+        characterFinder = new CharacterFinder(allCharacters);
     }
 
     private static Character findCharacter(String firstName) {
@@ -112,11 +112,15 @@ public class CharacterParser {
             return character;
         }
 
-        var filteredCharacters = findFamilyByLastName(familyName);
+        var filteredCharacters = characterFinder.findFamilyByLastName(familyName);
         if (!filteredCharacters.isEmpty())
         {
-            character = FindCharacterWithFamily(filteredCharacters, tempPathWithoutCurlyBraces.toString());
-            if (curlyBraces != null && curlyBraces.equals("Nemesis"))
+            var names = Arrays.stream(tempPathWithoutCurlyBraces.toString().split("/")).filter(n -> !n.isEmpty()).toList();
+            if (names.size() == 2) {
+                var firstName = names.get(1);
+                character = filteredCharacters.stream().filter(c -> Objects.equals(c.firstName, firstName)).findFirst().orElse(null);
+            }
+            if (character != null && curlyBraces != null && curlyBraces.equals("Nemesis"))
             {
                 return character.getNemesis();
             }
@@ -125,26 +129,4 @@ public class CharacterParser {
         return character;
     }
 
-    public static List<Character> findFamilyByLastName(String lastName) {
-        var family = allCharacters.stream().filter(c -> (c.lastName != null &&
-                c.lastName.equals(lastName) || (lastName == null && c.lastName == null))).collect(toList());
-
-        if (lastName == null)
-        {
-            var familyWithoutMonsters = family.stream().filter(c -> !c.isMonster);
-            return familyWithoutMonsters.toList();
-        }
-
-        return family;
-    }
-
-    private static Character FindCharacterWithFamily(List<Character> filteredCharacters, String tempPathWithoutCurlyBraces)
-    {
-        var names = Arrays.stream(tempPathWithoutCurlyBraces.split("/")).filter(n -> !n.isEmpty()).toList();
-        if (names.size() == 2) {
-            var firstName = names.get(1);
-            return filteredCharacters.stream().filter(c -> Objects.equals(c.firstName, firstName)).findFirst().orElse(null);
-        }
-        return null;
-    }
 }

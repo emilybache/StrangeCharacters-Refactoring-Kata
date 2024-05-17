@@ -64,7 +64,9 @@ class CharactersTest {
     public void FindElevenByLastName() {
         var finder = new CharacterFinder(allTestData());
         var characters = finder.findFamilyByLastName(null);
-        assertIterableEquals(characters, List.of(new Character("Eleven")));
+        assertIterableEquals(
+                firstNames(characters),
+                List.of("Eleven"));
     }
 
     @Test
@@ -86,11 +88,10 @@ class CharactersTest {
         var finder = new CharacterFinder(allTestData());
         var monsters = finder.findMonsters();
         assertIterableEquals(List.of(
-
-                new Character("Mindflayer"),
-                new Character("Demagorgon"),
-                new Character("Demadog")
-        ), monsters);
+                "Mindflayer",
+                "Demagorgon",
+                "Demadog"
+        ), firstNames(monsters));
     }
 
     @Test
@@ -98,8 +99,8 @@ class CharactersTest {
         var finder = new CharacterFinder(allTestData());
         var family = finder.findFamilyByCharacter("Jim");
         assertIterableEquals(List.of(
-                new Character("Eleven")
-        ), family);
+                "Eleven"
+        ), firstNames(family));
     }
 
     @Test
@@ -107,10 +108,10 @@ class CharactersTest {
         var finder = new CharacterFinder(allTestData());
         var family = finder.findFamilyByLastName("Wheeler");
         assertIterableEquals(List.of(
-                new Character("Mike", "Wheeler"),
-                new Character("Nancy", "Wheeler"),
-                new Character("Karen", "Wheeler")
-        ), family);
+                "Mike",
+                "Nancy",
+                "Karen"
+        ), firstNames(family));
     }
 
     @Test
@@ -125,5 +126,9 @@ class CharactersTest {
         var finder = new CharacterFinder(allTestData());
         var characters = finder.findFamilyByCharacter("George");
         assertEquals(characters.size(), 0);
+    }
+
+    private static List<String> firstNames(List<Character> characters) {
+        return characters.stream().map(f -> f.firstName).toList();
     }
 }

@@ -18,13 +18,13 @@ string? filename = null;
 if (args.Length > 0)
 {
     filename = args[0];
-    Console.WriteLine("Using characters file: " + filename);
+    Console.WriteLine("Using character file: " + filename);
 }
 CharacterParser.InitializeFromFile(filename);
 
 while (true)
 {
-    Console.WriteLine("Please enter the character path: (type 'exit' to exit program)");
+    Console.WriteLine("Please enter the path to evaluate: (type 'exit' to exit program)");
 
     var path = Console.ReadLine();
 

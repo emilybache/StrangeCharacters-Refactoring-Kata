@@ -20,7 +20,7 @@ if (args.Length > 0)
     filename = args[0];
     Console.WriteLine("Using character file: " + filename);
 }
-CharacterParser.InitializeFromFile(filename);
+CharacterParser.Certainly_InitializeFromFile_AndStuff(filename);
 
 while (true)
 {

@@ -9,37 +9,48 @@ public class CharacterParser
 {
     private static List<Character> allCharacters = new();
     
-    public static void InitializeFromFile(string? fileName)
+    public static void Certainly_InitializeFromFile_AndStuff(string? fileName)
     {
         fileName ??= "strange_characters.json";
         string jsonString = File.ReadAllText(fileName, Encoding.UTF8);
         var data = JsonSerializer.Deserialize<List<CharacterData>>(jsonString)!;
+
+        allCharacters = Applesauce(data);
+    }
+
+    private static List<Character> Applesauce(List<CharacterData> data)
+    {
+        List<Character> result = new();
         foreach (var characterData in data)
         {
             var character = new Character(characterData.FirstName, characterData.LastName, characterData.IsMonster);
-            allCharacters.Add(character);
+            result.Add(character);
         }
 
         foreach (var characterData in data)
         {
+            // find nemesis
             if (characterData.Nemesis != null)
             {
-                var nemesis = FindCharacter(characterData.Nemesis);
-                var character = FindCharacter(characterData.FirstName);
+                var nemesis = FindCharacter(result, characterData.Nemesis);
+                var character = FindCharacter(result, characterData.FirstName);
                 character?.SetNemesis(nemesis);
             }
 
+            // add family
             if (characterData.Children != null)
             {
-                var character = FindCharacter(characterData.FirstName);
+                var character = FindCharacter(result, characterData.FirstName);
                 foreach (var childName in characterData.Children)
                 {
-                    var child = FindCharacter(childName);
+                    var child = FindCharacter(result, childName);
                     if (child != null)
                         character?.AddChild(child);
                 }
             }
         }
+
+        return result;
     }
 
     public static Character EvaluatePath(string path)
@@ -92,7 +103,7 @@ public class CharacterParser
 
         if (!hasFamilyName)
         {
-            character = FindCharacter(characterName);
+            character = FindCharacter(allCharacters, characterName);
             if (curlyBraces != null && curlyBraces == "Nemesis")
             {
                 return character.Nemesis;
@@ -137,9 +148,9 @@ public class CharacterParser
     }
     
 
-    private static Character? FindCharacter(string firstName)
+    private static Character? FindCharacter(List<Character> characters, string firstName)
     {
-        var found = allCharacters.FindAll(c => c.FirstName == firstName);
+        var found = characters.FindAll(c => c.FirstName == firstName);
         if (found.Count > 0)
         {
             return found.First();

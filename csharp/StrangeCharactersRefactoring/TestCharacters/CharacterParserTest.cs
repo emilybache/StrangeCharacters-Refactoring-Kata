@@ -8,7 +8,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindCharacterByPath()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("/Jim/Eleven");
         Assert.AreEqual("Eleven", character?.FirstName);
     }
@@ -16,7 +16,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindCharacterByEmptyPath()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("");
         Assert.Null(character);
     }
@@ -24,7 +24,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindCharacterByPathWithFamilyName()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("/Wheeler:Karen/Wheeler:Nancy");
         Assert.AreEqual("Nancy", character?.FirstName);
     }
@@ -32,7 +32,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindNemesisByPath()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("/Joyce/Will{Nemesis}");
         Assert.AreEqual("Mindflayer", character?.FirstName);
     }
@@ -40,7 +40,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindNemesisByPathAndFamilyName()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("/Wheeler:Karen/Wheeler:Nancy{Nemesis}");
         Assert.AreEqual(null, character);
     }
@@ -48,7 +48,7 @@ public class CharacterParserTest
     [TestCase]
     public void FindNothingByPathAndFamilyName()
     {
-        CharacterParser.InitializeFromFile(null);
+        CharacterParser.Certainly_InitializeFromFile_AndStuff(null);
         var character = CharacterParser.EvaluatePath("/Wheeler:Karen/Wheeler:George");
         Assert.AreEqual(null, character);
     }

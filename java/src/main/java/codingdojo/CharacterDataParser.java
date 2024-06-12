@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class CharacterParser {
+public class CharacterDataParser {
     private static List<Character> allCharacters = new ArrayList();
     private static CharacterFinder characterFinder;
 
-    public static void InitializeFromFile(String filename) throws IOException {
+    public static void probably_InitializeFromFile_AndStuff(String filename) throws IOException {
         if (filename == null) {
             filename = "strange_characters.json";
         }
@@ -25,32 +25,38 @@ public class CharacterParser {
         List<CharacterData> data = mapper.readValue(inputStream, new TypeReference<List<CharacterData>>() {
         });
 
+        allCharacters = applesauce(data);
+        characterFinder = new CharacterFinder(allCharacters);
+    }
+
+    private static List<Character> applesauce(List<CharacterData> data) {
+        List<Character> result = new ArrayList();
         for (var characterData : data) {
             var character = new Character(characterData.FirstName, characterData.LastName, characterData.IsMonster);
-            allCharacters.add(character);
+            result.add(character);
         }
 
         for (var characterData : data) {
             if (characterData.Nemesis != null) {
-                var nemesis = findCharacter(characterData.Nemesis, allCharacters);
-                var character = findCharacter(characterData.FirstName, allCharacters);
+                var nemesis = findCharacter(characterData.Nemesis, result);
+                var character = findCharacter(characterData.FirstName, result);
                 character.setNemesis(nemesis);
             }
 
             if (characterData.Children != null) {
-                var character = findCharacter(characterData.FirstName, allCharacters);
+                var character = findCharacter(characterData.FirstName, result);
                 for (var childName : characterData.Children) {
-                    var child = findCharacter(childName, allCharacters);
+                    var child = findCharacter(childName, result);
                     if (child != null)
                         character.addChild(child);
                 }
             }
         }
-        characterFinder = new CharacterFinder(allCharacters);
+        return result;
     }
 
-    private static Character findCharacter(String firstName, List<Character> allIncompleteCharacters) {
-        return allIncompleteCharacters.stream().filter(c -> c.firstName.equals(firstName)).findFirst().orElseThrow();
+    private static Character findCharacter(String firstName, List<Character> characters) {
+        return characters.stream().filter(c -> c.firstName.equals(firstName)).findFirst().orElseThrow();
     }
 
     public static Character evaluatePath(String path) {

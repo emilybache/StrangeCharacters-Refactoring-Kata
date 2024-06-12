@@ -20,7 +20,7 @@ if (args.Length > 0)
     filename = args[0];
     Console.WriteLine("Using character file: " + filename);
 }
-CharacterParser.Certainly_InitializeFromFile_AndStuff(filename);
+CharacterDataParser.Probably_InitializeFromFile_AndStuff(filename);
 
 while (true)
 {
@@ -32,7 +32,7 @@ while (true)
     {
         break;
     }
-    var character = CharacterParser.EvaluatePath(path);
+    var character = CharacterDataParser.EvaluatePath(path);
 
     Console.WriteLine("Character: " + character);
    

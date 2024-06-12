@@ -5,11 +5,11 @@ using System.Text.RegularExpressions;
 
 namespace Characters;
 
-public class CharacterParser
+public class CharacterDataParser
 {
     private static List<Character> allCharacters = new();
     
-    public static void Certainly_InitializeFromFile_AndStuff(string? fileName)
+    public static void Probably_InitializeFromFile_AndStuff(string? fileName)
     {
         fileName ??= "strange_characters.json";
         string jsonString = File.ReadAllText(fileName, Encoding.UTF8);

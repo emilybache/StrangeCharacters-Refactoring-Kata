@@ -8,6 +8,7 @@ namespace Characters;
 public class CharacterDataParser
 {
     private static List<Character> allCharacters = new();
+    private static CharacterFinder characterFinder;
     
     public static void Probably_InitializeFromFile_AndStuff(string? fileName)
     {
@@ -16,6 +17,7 @@ public class CharacterDataParser
         var data = JsonSerializer.Deserialize<List<CharacterData>>(jsonString)!;
 
         allCharacters = Applesauce(data);
+        characterFinder = new CharacterFinder(allCharacters);
     }
 
     private static List<Character> Applesauce(List<CharacterData> data)
@@ -53,7 +55,7 @@ public class CharacterDataParser
         return result;
     }
 
-    public static Character EvaluatePath(string path)
+    public static Character? EvaluatePath(string path)
     {
         Character character = null;
 
@@ -103,19 +105,30 @@ public class CharacterDataParser
 
         if (!hasFamilyName)
         {
-            character = FindCharacter(allCharacters, characterName);
-            if (curlyBraces != null && curlyBraces == "Nemesis")
+            character = characterFinder.FindByFirstName(characterName);
+            if (character != null && curlyBraces != null && curlyBraces == "Nemesis")
             {
                 return character.Nemesis;
             }
             return character;
         }
 
-        var filteredCharacters = FilterCharactersByFamilyName(familyName, characterName);
+        var filteredCharacters = characterFinder.FindFamilyByLastName(familyName);
         if (filteredCharacters.Any())
         {
-            character = FindCharacterWithFamily(filteredCharacters, tempPathWithoutCurlyBraces);
-            if (curlyBraces != null && curlyBraces == "Nemesis")
+            var names = tempPathWithoutCurlyBraces.Split("/", StringSplitOptions.RemoveEmptyEntries);
+            var firstName = names.Last();
+            var found = filteredCharacters.FindAll(c => c.FirstName == firstName);
+            if (found.Count > 0)
+            {
+                character = found.First();
+            }
+            else
+            {
+                character = null;
+            }
+
+            if (character != null && curlyBraces != null && curlyBraces == "Nemesis")
             {
                 return character.Nemesis;
             }
@@ -123,31 +136,7 @@ public class CharacterDataParser
         
         return character;
     }
-
-    private static Character? FindCharacterWithFamily(List<Character> filteredCharacters, string tempPathWithoutCurlyBraces)
-    {
-        var firstName = tempPathWithoutCurlyBraces.Split("/", StringSplitOptions.RemoveEmptyEntries).Last();
-        var found = filteredCharacters.FindAll(c => c.FirstName == firstName);
-        if (found.Count > 0)
-        {
-            return found.First();
-        }
-
-        return null;
-    }
-
-    private static List<Character> FilterCharactersByFamilyName(string familyName, string characterName)
-    {
-        var found = allCharacters.FindAll(c => c.LastName == familyName);
-        if (allCharacters.Exists(c => c.FirstName == characterName))
-        {
-            return found;
-        }
-
-        return new List<Character>();
-    }
     
-
     private static Character? FindCharacter(List<Character> characters, string firstName)
     {
         var found = characters.FindAll(c => c.FirstName == firstName);

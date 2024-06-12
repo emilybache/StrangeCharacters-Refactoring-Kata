@@ -37,12 +37,15 @@ public class CharacterDataParser {
         }
 
         for (var characterData : data) {
+
+            // find nemesis
             if (characterData.Nemesis != null) {
                 var nemesis = findCharacter(characterData.Nemesis, result);
                 var character = findCharacter(characterData.FirstName, result);
                 character.setNemesis(nemesis);
             }
 
+            // add family
             if (characterData.Children != null) {
                 var character = findCharacter(characterData.FirstName, result);
                 for (var childName : characterData.Children) {

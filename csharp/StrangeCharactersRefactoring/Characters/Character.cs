@@ -8,9 +8,9 @@ public class Character
 
     public Character? Nemesis { get; private set; }
 
-    public HashSet<Character> children = new();
-    public HashSet<Character> siblings = new();
-    public HashSet<Character> parents = new();
+    internal HashSet<Character> children = new();
+    internal HashSet<Character> siblings = new();
+    internal HashSet<Character> parents = new();
 
     public Character(string firstName, string? lastName=null, bool isMonster=false)
     {
@@ -19,7 +19,7 @@ public class Character
         IsMonster = isMonster;
     }
 
-    public void AddChild(Character child)
+    internal void AddChild(Character child)
     {
         children.Add(child);
         child.parents.Add(this);
@@ -33,7 +33,7 @@ public class Character
         }
     }
 
-    public void SetNemesis(Character monster)
+    internal void SetNemesis(Character monster)
     {
         this.Nemesis = monster;
     }

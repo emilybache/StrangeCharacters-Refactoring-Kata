@@ -38,7 +38,5 @@ So for example you'd like to be able to do this:
     Please enter the path to evaluate: (type 'exit' to exit program)
     /Byers/Will{Sibling}
     Character: Character(Will, Byers, isMonster:False)
-    Please enter the path to evaluate: (type 'exit' to exit program)
-    exit
 
 This output is wrong - it should instead return the Character Jonathan Byers. Refactor the code as you need so you can add this feature cleanly.

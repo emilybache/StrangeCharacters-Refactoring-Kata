@@ -1,17 +1,5 @@
-﻿/*
-Main entry point for Characters program. Sample:
+﻿// Main entry point for Strange Characters program.
 
-Using characters file: strange_characters.json
-Please enter the character path: (type 'exit' to exit program)
-Eleven
-Character: Character(Eleven, , isMonster:False)
-Please enter the character path: (type 'exit' to exit program)
-Eleven{Nemesis}
-Character: Character(Demagorgon, , isMonster:True)
-Please enter the character path: (type 'exit' to exit program)
-exit
-
- */
 using Characters;
 
 string? filename = null;

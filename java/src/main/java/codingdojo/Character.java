@@ -1,17 +1,18 @@
 package codingdojo;
 
 import java.util.HashSet;
+import java.util.Objects;
 
-public class Character {
+public class Character implements Comparable<Character> {
   public final String firstName;
   public final String lastName;
   public final boolean isMonster;
 
   private Character nemesis;
 
-  public HashSet<Character> children = new HashSet<>();
-  public HashSet<Character> parents = new HashSet<>();
-  public HashSet<Character> siblings = new HashSet<>();
+  HashSet<Character> children = new HashSet<>();
+  HashSet<Character> parents = new HashSet<>();
+  HashSet<Character> siblings = new HashSet<>();
 
   public Character(String firstName, String lastName, boolean isMonster) {
     this.firstName = firstName;
@@ -31,7 +32,7 @@ public class Character {
     this(firstName, lastName, false);
   }
 
-  public void addChild(Character child) {
+  void addChild(Character child) {
     children.add(child);
     child.parents.add(this);
     for (Character character : children) {
@@ -55,4 +56,20 @@ public class Character {
     return String.format("Character(%s, %s, %s)", firstName, lastName, isMonster ? "True" : "False");
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Character character)) return false;
+      return isMonster == character.isMonster && Objects.equals(firstName, character.firstName) && Objects.equals(lastName, character.lastName);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstName, lastName, isMonster);
+  }
+
+  @Override
+  public int compareTo(Character o) {
+    return firstName.compareTo(o.firstName);
+  }
 }

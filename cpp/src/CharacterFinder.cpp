@@ -4,7 +4,7 @@
 
 namespace Characters {
 
-CharacterFinder::CharacterFinder(std::vector<std::unique_ptr<Character>> allCharacters)
+CharacterFinder::CharacterFinder(std::vector<std::shared_ptr<Character>> allCharacters)
 : _allCharacters(std::move(allCharacters))
 {
 }

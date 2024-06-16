@@ -4,7 +4,8 @@
 #include <fstream>
 #include <regex>
 
-#include "CharacterParser.hpp"
+#include "CharacterDataParser.hpp"
+#include "CharacterFinder.hpp"
 #include "nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -25,9 +26,9 @@ namespace {
 }
 
 namespace Characters {
-    std::vector<std::unique_ptr<Character>> CharacterParser::allCharacters;
-
-    void CharacterParser::initializeFromFile(const std::string &filename) {
+    std::vector<std::shared_ptr<Character>> CharacterDataParser::allCharacters;
+    
+    void CharacterDataParser::probably_initializeFromFile_andstuff(const std::string &filename) {
         allCharacters.clear();
 
         std::ifstream data_stream(filename, std::ifstream::in);
@@ -37,6 +38,10 @@ namespace Characters {
             return;
         }
         auto data = json::parse(data_stream);
+        applesauce(data);
+    }
+
+    void CharacterDataParser::applesauce(nlohmann::basic_json<> data) {
         for (auto characterData : data)
         {
             auto character = new Character(
@@ -52,8 +57,8 @@ namespace Characters {
         {
             if (!characterData["Nemesis"].is_null())
             {
-                auto nemesis = findCharacter(characterData["Nemesis"].get<std::string>());
-                auto character = findCharacter(characterData["FirstName"].get<std::string>());
+                auto nemesis = findCharacter(allCharacters, characterData["Nemesis"].get<std::string>());
+                auto character = findCharacter(allCharacters, characterData["FirstName"].get<std::string>());
 
                 if (character.has_value())
                     (*character)->SetNemesis(nemesis);
@@ -61,10 +66,10 @@ namespace Characters {
 
             if (!characterData["Children"].is_null())
             {
-                auto character = findCharacter(characterData["FirstName"].get<std::string>());
+                auto character = findCharacter(allCharacters, characterData["FirstName"].get<std::string>());
                 for (auto childName : characterData["Children"])
                 {
-                    auto child = findCharacter(childName.get<std::string>());
+                    auto child = findCharacter(allCharacters, childName.get<std::string>());
                     if (child.has_value())
                         (*character)->AddChild(*child);
                 }
@@ -72,8 +77,9 @@ namespace Characters {
         }
     }
 
-    std::optional<Character *> CharacterParser::evaluatePath(const std::string &path) {
+    std::optional<Character *> CharacterDataParser::evaluatePath(const std::string &path) {
         std::optional<Character*> character = std::nullopt;
+        CharacterFinder characterFinder(allCharacters);
 
         auto hasFamilyName = false;
         auto characterName = std::string();
@@ -124,7 +130,7 @@ namespace Characters {
 
         if (!hasFamilyName)
         {
-            character = findCharacter(characterName);
+            character = findCharacter(allCharacters, characterName);
             if (curlyBraces == "Nemesis")
             {
                 return (*character)->Nemesis;
@@ -132,11 +138,21 @@ namespace Characters {
             return character;
         }
 
-        auto filteredCharacters = filterCharactersByFamilyName(familyName, characterName);
+        auto filteredCharacters = characterFinder.FindFamilyByLastName(familyName);
         if (!filteredCharacters.empty())
         {
-            character = findCharacterWithFamily(filteredCharacters, tempPathWithoutCurlyBraces);
-            if (curlyBraces == "Nemesis")
+            auto firstName = std::string_view(tempPathWithoutCurlyBraces).substr(
+                std::string_view(tempPathWithoutCurlyBraces).find_last_of("/")+1
+            );
+            auto c = std::find_if(filteredCharacters.begin(), filteredCharacters.end(),
+                                  [&firstName](const auto& character) { return character->FirstName == firstName; });
+            if (c != filteredCharacters.end()) {
+                character = *c;
+            } else {
+                character = std::nullopt;
+            }
+        
+            if (character != nullptr && curlyBraces == "Nemesis")
             {
                 return (*character)->Nemesis;
             }
@@ -145,42 +161,12 @@ namespace Characters {
         return character;
     }
 
-    std::optional<Character*> CharacterParser::findCharacter(std::string_view firstName) {
-        auto c = std::find_if(allCharacters.begin(), allCharacters.end(),
+    std::optional<Character*> CharacterDataParser::findCharacter(std::vector<std::shared_ptr<Character>> characters, std::string_view firstName) {
+        auto c = std::find_if(characters.begin(), characters.end(),
                 [&firstName](const auto& character) { return character->FirstName == firstName; });
 
-        if (c != allCharacters.end())
+        if (c != characters.end())
             return c->get();
         return std::nullopt;
-    }
-
-    std::optional<Character*> CharacterParser::findCharacterWithFamily(std::vector<Character *> filteredCharacters,
-                                                                   std::string_view tempPathWithoutCurlyBraces) {
-        auto firstName = tempPathWithoutCurlyBraces.substr(
-                tempPathWithoutCurlyBraces.find_last_of("/")+1
-                );
-
-        auto c = std::find_if(filteredCharacters.begin(), filteredCharacters.end(),
-                              [&firstName](const auto& character) { return character->FirstName == firstName; });
-        if (c != filteredCharacters.end())
-            return *c;
-
-        return std::nullopt;
-    }
-
-    std::vector<Character *>
-    CharacterParser::filterCharactersByFamilyName(std::string_view familyName, std::string_view characterName) {
-        auto found = std::vector<Character*> { };
-        for (auto c = allCharacters.begin(); c != allCharacters.end(); ++c)
-            if ((*c)->LastName == familyName)
-                found.push_back(c->get());
-
-        if (std::any_of(found.begin(), found.end(),
-                [&characterName](const auto& character) { return character->FirstName == characterName; }))
-        {
-            return found;
-        }
-
-        return std::vector<Character*> { };
     }
 }

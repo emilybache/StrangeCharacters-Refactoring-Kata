@@ -14,10 +14,10 @@ class Character;
 class CharacterFinder
 {
 private:
-    std::vector<std::unique_ptr<Character>> _allCharacters;
+    std::vector<std::shared_ptr<Character>> _allCharacters;
 
 public:
-    CharacterFinder(std::vector<std::unique_ptr<Character>> allCharacters);
+    CharacterFinder(std::vector<std::shared_ptr<Character>> allCharacters);
     std::optional<Character*> FindByFirstName(std::string_view name);
     std::optional<Character*> FindParent(std::string_view firstName);
     std::vector<Character*> FindMonsters();

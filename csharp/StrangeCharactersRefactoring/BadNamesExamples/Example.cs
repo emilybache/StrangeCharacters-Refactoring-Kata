@@ -9,7 +9,7 @@ public class Example
 {
     private DBAccess db;
     
-    public string CustomerQuery(DBAccess db, int maxCount)
+    public string UpdatedCostumers(DBAccess db, int maxCount)
     {
         return Select(db, maxCount, QueryType.ALL_USERS).toJson();
     }
@@ -18,11 +18,11 @@ public class Example
     {
         DBAccess db = Connect(args[0]);
         var listener = eventListener(args[1], EventType.ALL);
-        var app = new ExtraQueueingResponsePartialMessage(db);
+        var app = new ExtraQueueingResponsePromotion(db);
         Register(app, listener);
     }
 
-    private void Register(ExtraQueueingResponsePartialMessage app, EventListener listener)
+    private void Register(ExtraQueueingResponsePromotion app, EventListener listener)
     {
         throw new NotImplementedException();
     }
@@ -43,9 +43,9 @@ public class Example
     }   
 }
 
-public class ExtraQueueingResponsePartialMessage
+public class ExtraQueueingResponsePromotion
 {
-    public ExtraQueueingResponsePartialMessage(DBAccess db)
+    public ExtraQueueingResponsePromotion(DBAccess db)
     {
         throw new NotImplementedException();
     }

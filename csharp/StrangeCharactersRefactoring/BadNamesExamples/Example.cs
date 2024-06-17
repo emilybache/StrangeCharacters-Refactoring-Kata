@@ -11,15 +11,14 @@ public class Example
     
     public string UpdatedCostumers(DBAccess db, int maxCount)
     {
-        return Select(db, maxCount, QueryType.ALL_USERS).toJson();
+        return Select(db, maxCount, QueryType.CUSTOMERS).ToCsv();
     }
 
     public void StartXqrp(object[] args)
     {
         DBAccess db = Connect(args[0]);
-        var listener = eventListener(args[1], EventType.ALL);
         var app = new ExtraQueueingResponsePromotion(db);
-        Register(app, listener);
+        Register(app, eventListener(args[1], EventType.ALL));
     }
 
     private void Register(ExtraQueueingResponsePromotion app, EventListener listener)
@@ -37,7 +36,7 @@ public class Example
         throw new NotImplementedException();
     }
 
-    private static DBResult Select(DBAccess db, int maxCount, QueryType allUsers)
+    private static DBResult Select(DBAccess db, int maxCount, QueryType queryType)
     {
         throw new NotImplementedException();
     }   
@@ -58,7 +57,7 @@ public enum EventType
 
 internal class DBResult
 {
-    public string toJson()
+    public string ToCsv()
     {
         throw new NotImplementedException();
     }
@@ -70,5 +69,5 @@ public class DBAccess
 
 internal enum QueryType
 {
-    ALL_USERS
+    CUSTOMERS
 }

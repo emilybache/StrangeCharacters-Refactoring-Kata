@@ -29,7 +29,7 @@ public class CharacterDataParser {
     }
 
     private static List<Character> applesauce(List<CharacterData> data) {
-        List<Character> result = new ArrayList();
+        List<Character> result = new ArrayList<>();
         for (var characterData : data) {
             var character = new Character(characterData.FirstName, characterData.LastName, characterData.IsMonster);
             result.add(character);

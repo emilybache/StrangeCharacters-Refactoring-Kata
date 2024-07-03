@@ -63,7 +63,6 @@ public class CharacterDataParser {
     }
 
     public static Character evaluatePath(String path) {
-        Character character = null;
 
         boolean hasFamilyName = false;
         String characterName = "";
@@ -111,6 +110,7 @@ public class CharacterDataParser {
             tempPathWithoutCurlyBraces.insert(0, "/" + localNameWithoutCurlyBraces);
         }
 
+        Character character = null;
         if (!hasFamilyName)
         {
             character = characterFinder.findByFirstName(characterName);

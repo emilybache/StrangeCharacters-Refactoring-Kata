@@ -22,8 +22,7 @@ public class CharacterDataParser {
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
         InputStream inputStream = classloader.getResourceAsStream(filename);
         ObjectMapper mapper = new ObjectMapper();
-        List<CharacterData> data = mapper.readValue(inputStream, new TypeReference<List<CharacterData>>() {
-        });
+        List<CharacterData> data = mapper.readValue(inputStream, new TypeReference<List<CharacterData>>() {});
 
         allCharacters = applesauce(data);
         characterFinder = new CharacterFinder(allCharacters);
@@ -71,39 +70,32 @@ public class CharacterDataParser {
         var tempPathWithoutCurlyBraces = new StringBuilder();
         String curlyBraces = "";
         var structureList = path.split("/");
-        for (var i = structureList.length - 1; i >= 0; i--)
-        {
+        for (var i = structureList.length - 1; i >= 0; i--) {
             if (structureList[i].isEmpty())
                 continue;
             var localName = "";
             var localNameWithoutCurlyBraces = "";
             var familyLocalNameList = structureList[i].split(":");
-            if (familyLocalNameList.length == 2)
-            {
-                if (!hasFamilyName)
-                {
+            if (familyLocalNameList.length == 2) {
+                if (!hasFamilyName) {
                     familyName = familyLocalNameList[0];
                     hasFamilyName = true;
                 }
 
                 familyName = familyLocalNameList[0];
                 localName = familyLocalNameList[1];
-            }
-            else if (familyLocalNameList.length == 1)
-            {
+            } else if (familyLocalNameList.length == 1) {
                 localName = familyLocalNameList[0];
             }
 
-            if (i == structureList.length - 1)
-            {
+            if (i == structureList.length - 1) {
                 characterName = localName;
             }
 
             localNameWithoutCurlyBraces = localName.replaceAll("\\{[^\\{]*?\\}", "");
             var pattern = Pattern.compile("(.*)\\{([^\\{]*)\\}");
             var matcher = pattern.matcher(localName);
-            if (matcher.find() && matcher.groupCount() > 0)
-            {
+            if (matcher.find() && matcher.groupCount() > 0) {
                 curlyBraces = matcher.group(2);
                 characterName = matcher.group(1);
             }
@@ -111,26 +103,22 @@ public class CharacterDataParser {
             tempPathWithoutCurlyBraces.insert(0, "/" + localNameWithoutCurlyBraces);
         }
 
-        if (!hasFamilyName)
-        {
+        if (!hasFamilyName) {
             character = characterFinder.findByFirstName(characterName);
-            if (curlyBraces != null && curlyBraces.equals("Nemesis"))
-            {
+            if (curlyBraces != null && curlyBraces.equals("Nemesis")) {
                 return character.getNemesis();
             }
             return character;
         }
 
         var filteredCharacters = characterFinder.findFamilyByLastName(familyName);
-        if (!filteredCharacters.isEmpty())
-        {
+        if (!filteredCharacters.isEmpty()) {
             var names = Arrays.stream(tempPathWithoutCurlyBraces.toString().split("/")).filter(n -> !n.isEmpty()).toList();
             if (names.size() == 2) {
                 var firstName = names.get(1);
                 character = filteredCharacters.stream().filter(c -> Objects.equals(c.firstName, firstName)).findFirst().orElse(null);
             }
-            if (character != null && curlyBraces != null && curlyBraces.equals("Nemesis"))
-            {
+            if (character != null && curlyBraces != null && curlyBraces.equals("Nemesis")) {
                 return character.getNemesis();
             }
         }

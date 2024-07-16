@@ -23,7 +23,7 @@ class CharacterDataParser
     {
         $result = [];
         foreach ($data as $characterData) {
-            $result[] = new Character($characterData->FirstName, $characterData->LastName, $characterData->IsMonster);
+            $result[] = Character::withFirstAndLastNameAndMonsterStatus($characterData->FirstName, $characterData->LastName, $characterData->IsMonster);
         }
 
         foreach ($data as $characterData) {

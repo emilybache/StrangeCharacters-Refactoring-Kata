@@ -21,6 +21,10 @@ class Character
         $this->isMonster = $isMonster;
     }
 
+    public static function withFirstAndLastNameAndMonsterStatus(string $firstName, ?string $lastName, bool $isMonster): Character {
+        return new self($firstName, $lastName, $isMonster);
+    }
+
     public static function withName(string $firstName): Character {
         return new self($firstName, null, false);
     }

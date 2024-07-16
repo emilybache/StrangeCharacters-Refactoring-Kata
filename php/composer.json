@@ -1,0 +1,14 @@
+{
+  "require-dev": {
+    "phpunit/phpunit": "11.2.7"
+  },
+  "require": {
+    "ext-readline": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "StrangeCharacters\\": "src/StrangeCharacters"
+    },
+    "files": ["constants.php"]
+  }
+}

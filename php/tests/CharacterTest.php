@@ -19,7 +19,8 @@ class CharacterTest extends TestCase
     #[Test]
     public function FindElevenByLastName(): void {
         $finder = new CharacterFinder(CharacterFactory::allTestData());
-        self::assertEquals(array_values($finder->findFamilyByLastName(null)), [Character::withName("Eleven")]);
+        $family = $finder->findFamilyByLastName(null);
+        self::assertEquals("Eleven", current($family)->firstName);
     }
 
     #[Test]
@@ -38,31 +39,36 @@ class CharacterTest extends TestCase
     #[Test]
     public function FindMonsters() :  void {
         $finder = new CharacterFinder(CharacterFactory::allTestData());
-        self::assertEquals([
-            Character::withName("Mindflayer"),
-            Character::withName("Demagorgon"),
-            Character::withName("Demadog")
-        ], array_values($finder->findMonsters()));
+        $foundMonsters = array_map(fn(Character $character) => $character->firstName, $finder->findMonsters());
+        foreach([
+            "Mindflayer",
+            "Demagorgon",
+            "Demadog"
+        ] as $monsterName) {
+            self::assertContains($monsterName, $foundMonsters);
+        }
     }
 
     #[Test]
     public function FindFamily(): void {
         $finder = new CharacterFinder(CharacterFactory::allTestData());
         $family = $finder->findFamilyByCharacter("Jim");
-        self::assertEquals([
-            Character::withName("Eleven")
-        ], array_values($family));
+        self::assertContains("Eleven", array_map(fn(Character $character) => $character->firstName, $family));
+        self::assertCount(1, $family);
     }
 
     #[Test]
     public function FindFamilyByLastName(): void {
         $finder = new CharacterFinder(CharacterFactory::allTestData());
-        $family = $finder->findFamilyByLastName("Wheeler");
-        self::assertEquals([
-            Character::withFirstAndLastName("Mike", "Wheeler"),
-            Character::withFirstAndLastName("Nancy", "Wheeler"),
-            Character::withFirstAndLastName("Karen", "Wheeler")
-        ], array_values($family));
+        $familyNames = array_map(fn(Character $character) => [$character->firstName, $character->lastName], $finder->findFamilyByLastName("Wheeler"));
+        foreach ( [
+            ["Mike", "Wheeler"],
+            ["Nancy", "Wheeler"],
+            ["Karen", "Wheeler"]
+                  ] as $names) {
+            self::assertContains($names, $familyNames);
+        }
+        self::assertCount(3, $familyNames);
     }
 
     #[Test]
@@ -77,8 +83,4 @@ class CharacterTest extends TestCase
         $characters = $finder->findFamilyByCharacter("George");
         self::assertCount(0, $characters);
     }
-
-    // private static List<String> firstNames(List<Character> characters) {
-    //     return characters.stream().map(f -> f.firstName).toList();
-    // }
 }

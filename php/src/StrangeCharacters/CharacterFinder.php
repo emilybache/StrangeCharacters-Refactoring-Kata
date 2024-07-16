@@ -32,8 +32,7 @@ readonly class CharacterFinder
 
     public function findFamilyByLastName(?string $lastName): array
     {
-        $family = array_filter($this->allCharacters, fn(Character $c) => $c->lastName != null &&
-                $c->lastName == $lastName || ($lastName == null));
+        $family = array_filter($this->allCharacters, fn(Character $c) => $c->lastName == $lastName);
 
         return $lastName == null ? array_filter($family, fn(Character $c) => !$c->isMonster) : $family;
     }

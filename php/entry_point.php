@@ -14,7 +14,7 @@ if ($argc > 1) {
 CharacterDataParser::probably_InitializeFromFile_AndStuff($filename);
 
 while (true) {
-    echo "Please enter the path to evaluate: (type 'exit' to exit program)";
+    echo "Please enter the path to evaluate: (type 'exit' to exit program)".PHP_EOL;
 
     $path = readline();
 
@@ -23,5 +23,5 @@ while (true) {
     }
     $character = CharacterDataParser::evaluatePath($path);
 
-    echo "Character: $character";
+    echo "Character: $character".PHP_EOL;
 }

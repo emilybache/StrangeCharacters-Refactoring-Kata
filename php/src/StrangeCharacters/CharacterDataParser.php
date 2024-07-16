@@ -28,14 +28,14 @@ class CharacterDataParser
 
         foreach ($data as $characterData) {
             // find nemesis
-            if ($characterData->Nemesis != null) {
+            if (!empty($characterData->Nemesis)) {
                 $nemesis = self::findCharacter($characterData->Nemesis, $result);
                 $character = self::findCharacter($characterData->FirstName, $result);
                 $character->setNemesis($nemesis);
             }
 
             // add family
-            if ($characterData->Children != null) {
+            if (!empty($characterData->Children)) {
                 $character = self::findCharacter($characterData->FirstName, $result);
                 foreach ($characterData->Children as $childName) {
                     $child = self::findCharacter($childName, $result);
@@ -69,11 +69,9 @@ class CharacterDataParser
             if (empty($structureList[$i]))
                 continue;
             $localName = "";
-            $localNameWithoutCurlyBraces = "";
             $familyLocalNameList = explode(":", $structureList[$i]);
             if (count($familyLocalNameList) == 2) {
                 if (!$hasFamilyName) {
-                    $familyName = $familyLocalNameList[0];
                     $hasFamilyName = true;
                 }
 
@@ -87,8 +85,8 @@ class CharacterDataParser
                 $characterName = $localName;
             }
 
-            $localNameWithoutCurlyBraces = preg_replace("|\\{[^\\{]*?\\}|", "", $localName);
-            $pattern = "|(.*)\\{([^\\{]*)\\}|";
+            $localNameWithoutCurlyBraces = preg_replace("|\{[^{]*?}|", "", $localName);
+            $pattern = "|(.*)\{([^{]*)}|";
             $matches = [];
             preg_match($pattern, $localName, $matches);
             if (count($matches) > 0) {
@@ -110,13 +108,14 @@ class CharacterDataParser
 
         $filteredCharacters = self::$characterFinder->findFamilyByLastName($familyName);
         if (!empty($filteredCharacters)) {
-            $names = array_filter(explode("/", $tempPathWithoutCurlyBraces), fn($n) => !empty($n));
+            $names = array_filter(explode("/", $tempPathWithoutCurlyBraces), fn(string $name) => !empty($name));
             if (count($names) == 2) {
-                $firstName = $names[1];
-                $candidates = array_filter($filteredCharacters, fn(Character $c) => ($c->FirstName == $firstName));
-                $character = $candidates[0] ?? null;
+                $firstName = next($names);
+                $candidates = array_filter($filteredCharacters, fn(Character $c) => ($c->firstName == $firstName));
+                $character = !empty($candidates) ? current($candidates) : null;
             }
             if ($character != null && $curlyBraces == "Nemesis") {
+
                 return $character->getNemesis();
             }
         }

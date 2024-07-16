@@ -9,7 +9,7 @@ class Character
     public readonly ?string $lastName;
     public readonly bool $isMonster;
 
-    private Character $nemesis;
+    private ?Character $nemesis = null;
 
     private array $children = [];
     private array $parents = [];
@@ -48,7 +48,7 @@ class Character
         }
     }
 
-    public function getNemesis(): Character
+    public function getNemesis(): ?Character
     {
         return $this->nemesis;
     }
@@ -59,7 +59,7 @@ class Character
     }
 
     public function __toString(): string {
-        return sprintf("Character(%s, %s, %s)", $this->firstName, $this->firstName, $this->firstName ? "True" : "False");
+        return sprintf("Character(%s, %s, %s)", $this->firstName, $this->lastName, $this->isMonster ? "True" : "False");
     }
 
     public function getParents(): array

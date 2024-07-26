@@ -42,9 +42,9 @@ class CharactersTest {
         var finder = new CharacterFinder(CharacterFactory.allTestData());
         var monsters = finder.findMonsters();
         assertIterableEquals(List.of(
-                new Character("Mindflayer"),
-                new Character("Demagorgon"),
-                new Character("Demadog")
+                new Character("Mindflayer", true),
+                new Character("Demagorgon", true),
+                new Character("Demadog", true)
         ), monsters);
     }
 

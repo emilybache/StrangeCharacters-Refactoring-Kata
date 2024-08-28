@@ -3,7 +3,7 @@ _Support this and all my katas via [Patreon](https://www.patreon.com/EmilyBache)
 Strange Characters Refactoring Kata
 ===================================
 
-You can use this exercise starting point to practice refactoring: 
+You can use this exercise starting point to practice refactoring. Kata Description: [Strange Characters Kata](https://www.sammancoaching.org/kata_descriptions/strange_characters.html). You could try practicing these refactorings:
 
 * Convert a static class into a normal class
 * Extract method where you have more than one return value
@@ -11,7 +11,7 @@ You can use this exercise starting point to practice refactoring:
 
 You can also use this code to learn about designing tests that make assertions on complex objects and data structures.
 
-You can find more information here: [Strange Characters Kata](https://www.sammancoaching.org/kata_descriptions/strange_characters.html). If you like this kata, you may be interested in [my books](https://leanpub.com/u/emilybache) too.
+There is a video explaining one way to use this exercise [Trustworthy Code with Naming as a Process](https://youtu.be/PPQHJpWG4GA). If you like this kata, you may be interested in [my books](https://leanpub.com/u/emilybache) too.
 
 Sample Program Output
 ---------------------

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+namespace StrangeCharacters\Tests;
 
 use StrangeCharacters\Character;
 use PHPUnit\Framework\TestCase;

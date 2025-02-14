@@ -11,5 +11,10 @@
       "StrangeCharacters\\": "src/StrangeCharacters"
     },
     "files": ["constants.php"]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StrangeCharacters\\Tests\\": "tests/"
+    }
   }
 }

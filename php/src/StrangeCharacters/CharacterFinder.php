@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace StrangeCharacters;
 
-readonly class CharacterFinder
+class CharacterFinder
 {
-    private array $allCharacters;
+    private readonly array $allCharacters;
 
     public function __construct(array $allCharacters)
     {

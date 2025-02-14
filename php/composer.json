@@ -3,7 +3,7 @@
     "phpunit/phpunit": "11.2.7"
   },
   "require": {
-    "php": ">=8.3",
+    "php": "^8.2",
     "ext-readline": "*"
   },
   "autoload": {

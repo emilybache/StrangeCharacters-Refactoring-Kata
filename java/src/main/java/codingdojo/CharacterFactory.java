@@ -15,20 +15,24 @@ public class CharacterFactory {
         var jonathan = new Character("Jonathan", "Byers");
         var will = new Character("Will", "Byers");
         var karen = new Character("Karen", "Wheeler");
+        var holly = new Character("Holly", "Wheeler");
         var steve = new Character("Steve", "Harrington");
         var mindflayer = new Character("Mindflayer", true);
         var demagorgon = new Character("Demagorgon", true);
         var demadog = new Character("Demadog", true);
+        var mrwhatsit = new Character("MrWhatsit", true);
 
         joyce.addChild(jonathan);
         joyce.addChild(will);
         jim.addChild(eleven);
         karen.addChild(nancy);
         karen.addChild(mike);
+        karen.addChild(holly);
 
         eleven.setNemesis(demagorgon);
         will.setNemesis(mindflayer);
         dustin.setNemesis(demadog);
+        holly.setNemesis(mrwhatsit);
 
         return Arrays.asList(
                 joyce,
@@ -44,6 +48,8 @@ public class CharacterFactory {
                 demagorgon,
                 demadog,
                 karen,
+                holly,
+                mrwhatsit,
                 steve);
     }
 
@@ -51,9 +57,11 @@ public class CharacterFactory {
         Character karen = new Character("Karen", "Wheeler");
         Character mike = new Character("Mike", "Wheeler");
         Character nancy = new Character("Nancy", "Wheeler");
+        Character holly = new Character("Holly", "Wheeler");
 
         karen.addChild(nancy);
         karen.addChild(mike);
+        karen.addChild(holly);
 
         return Arrays.asList(karen, mike, nancy);
     }

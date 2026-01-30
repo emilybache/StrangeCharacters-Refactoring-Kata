@@ -44,7 +44,8 @@ class CharactersTest {
         assertIterableEquals(List.of(
                 new Character("Mindflayer", true),
                 new Character("Demagorgon", true),
-                new Character("Demadog", true)
+                new Character("Demadog", true),
+                new Character("MrWhatsit", true)
         ), monsters);
     }
 
@@ -64,7 +65,8 @@ class CharactersTest {
         assertIterableEquals(List.of(
                 new Character("Mike", "Wheeler"),
                 new Character("Nancy", "Wheeler"),
-                new Character("Karen", "Wheeler")
+                new Character("Karen", "Wheeler"),
+                new Character("Holly", "Wheeler")
         ), family);
     }
 

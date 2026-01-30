@@ -1,5 +1,7 @@
 set(SRC_LIB_NAME src)
-set(SOURCES CharacterFinder.cpp Character.cpp CharacterDataParser.cpp)
+set(SOURCES CharacterFinder.cpp Character.cpp CharacterDataParser.cpp
+        CharacterFactory.cpp
+        CharacterFactory.hpp)
 
 include(FetchContent)
 

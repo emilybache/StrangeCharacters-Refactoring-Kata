@@ -3,48 +3,105 @@
 
 #include <catch2/catch.hpp>
 
+#include "CharacterFactory.hpp"
+
+#include <algorithm>
+
 namespace Characters::Test {
 
-std::vector<std::shared_ptr<Character>> allTestData()
-{
-    auto joyce = std::make_shared<Character>("Joyce", "Byers");
-    auto jim = std::make_shared<Character>("Jim", "Hopper");
-    auto mike = std::make_shared<Character>("Mike", "Wheeler");
-    auto eleven = std::make_shared<Character>("Eleven");
-    auto dustin = std::make_shared<Character>("Dustin", "Henderson");
-    auto lucas = std::make_shared<Character>("Lucas", "Sinclair");
-    auto nancy = std::make_shared<Character>("Nancy", "Wheeler");
-    auto jonathan = std::make_shared<Character>("Jonathan", "Byers");
-    auto will = std::make_shared<Character>("Will", "Byers");
-    auto karen = std::make_shared<Character>("Karen", "Wheeler");
-    auto steve = std::make_shared<Character>("Steve", "Harrington");
-    auto mindflayer = std::make_shared<Character>("Mindflayer", std::nullopt, true);
-    auto demagorgon = std::make_shared<Character>("Demagorgon", std::nullopt, true);
-    auto demadog = std::make_shared<Character>("Demadog", std::nullopt, true);
-    
-    joyce->AddChild(jonathan.get());
-    joyce->AddChild(will.get());
-    jim->AddChild(eleven.get());
-    karen->AddChild(nancy.get());
-    karen->AddChild(mike.get());
-    
-    eleven->Nemesis = demagorgon.get();
-    will->Nemesis = mindflayer.get();
-    dustin->Nemesis = demadog.get();
+bool contains_character(const std::vector<Character*>& characters, const Character& character) {
+    return std::any_of(characters.begin(), characters.end(), [&character](const Character* c) {
+        return *c == character;
+    });
+}
 
-    std::vector<std::shared_ptr<Character>> characters;
-    for (auto& i : { &joyce, &jim, &mike, &eleven, &dustin, &lucas, &nancy, &jonathan, &will, &karen, &steve, &mindflayer, &demagorgon, &demadog }) {
-      characters.push_back(std::move(*i));
+bool are_equivalent(std::vector<Character*> actual, std::vector<Character> expected) {
+    if (actual.size() != expected.size()) return false;
+    for (const auto& exp : expected) {
+        if (!contains_character(actual, exp)) return false;
     }
-
-    return characters;
+    return true;
 }
 
 TEST_CASE("Find Character By First Name")
 {
-    CharacterFinder finder(allTestData());
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
     auto character = finder.FindByFirstName("Jim");
+    REQUIRE(character.has_value());
     REQUIRE("Jim" == (*character)->FirstName);
 }
-    
+
+TEST_CASE("Find Eleven By Last Name")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    std::optional<std::string> nullString = std::nullopt;
+    auto characters = finder.FindFamilyByLastName(nullString);
+    REQUIRE(contains_character(characters, Character("Eleven")));
+}
+
+TEST_CASE("Find Parent")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto parent = finder.FindParent("Nancy");
+    REQUIRE(parent.has_value());
+    REQUIRE("Karen" == (*parent)->FirstName);
+}
+
+TEST_CASE("Find No Parent")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto parent = finder.FindParent("George");
+    REQUIRE(!parent.has_value());
+}
+
+TEST_CASE("Find Monsters")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto monsters = finder.FindMonsters();
+    std::vector<Character> expected = {
+        Character("Mindflayer"),
+        Character("Demagorgon"),
+        Character("Demadog"),
+        Character("MrWhatsit")
+    };
+    REQUIRE(are_equivalent(monsters, expected));
+}
+
+TEST_CASE("Find Family")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto family = finder.FindFamilyByCharacter("Jim");
+    std::vector<Character> expected = {
+        Character("Eleven")
+    };
+    REQUIRE(are_equivalent(family, expected));
+}
+
+TEST_CASE("Find Family By Last Name")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto family = finder.FindFamilyByLastName("Wheeler");
+    std::vector<Character> expected = {
+        Character("Nancy", "Wheeler"),
+        Character("Mike", "Wheeler"),
+        Character("Karen", "Wheeler"),
+        Character("Holly", "Wheeler")
+    };
+    REQUIRE(are_equivalent(family, expected));
+}
+
+TEST_CASE("Find Nothing By Name")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto character = finder.FindByFirstName("George");
+    REQUIRE(!character.has_value());
+}
+
+TEST_CASE("Find No Family")
+{
+    CharacterFinder finder(CharacterFactory::StrangeCharacters());
+    auto characters = finder.FindFamilyByCharacter("George");
+    REQUIRE(characters.empty());
+}
+
 }

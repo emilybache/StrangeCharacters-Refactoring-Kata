@@ -48,6 +48,12 @@
     "LastName": "Wheeler",
     "IsMonster": false,
     "Nemesis": null
+  },  
+  {
+    "FirstName": "Holly",
+    "LastName": "Wheeler",
+    "IsMonster": false,
+    "Nemesis": "MrWhatsit"
   },
   {
     "FirstName": "Jonathan",
@@ -72,13 +78,19 @@
     "LastName": null,
     "IsMonster": true,
     "Nemesis": null
+  },  
+  {
+    "FirstName": "MrWhatsit",
+    "LastName": null,
+    "IsMonster": true,
+    "Nemesis": null
   },
   {
     "FirstName": "Karen",
     "LastName": "Wheeler",
     "IsMonster": false,
     "Nemesis": null,
-    "Children": ["Nancy", "Mike"]
+    "Children": ["Nancy", "Mike", "Holly"]
   },
   {
     "FirstName": "Steve",

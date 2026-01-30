@@ -67,14 +67,14 @@ public class CharacterDataParser {
         boolean hasFamilyName = false;
         String characterName = "";
         var familyName = "";
-        var tempPathWithoutCurlyBraces = new StringBuilder();
-        String curlyBraces = "";
+        var tempPathWithoutAttribute = new StringBuilder();
+        String characterAttribute = "";
         var structureList = path.split("/");
         for (var i = structureList.length - 1; i >= 0; i--) {
             if (structureList[i].isEmpty())
                 continue;
             var localName = "";
-            var localNameWithoutCurlyBraces = "";
+            var localNameWithoutAttribute = "";
             var familyLocalNameList = structureList[i].split(":");
             if (familyLocalNameList.length == 2) {
                 if (!hasFamilyName) {
@@ -92,20 +92,20 @@ public class CharacterDataParser {
                 characterName = localName;
             }
 
-            localNameWithoutCurlyBraces = localName.replaceAll("\\{[^\\{]*?\\}", "");
+            localNameWithoutAttribute = localName.replaceAll("\\{[^\\{]*?\\}", "");
             var pattern = Pattern.compile("(.*)\\{([^\\{]*)\\}");
             var matcher = pattern.matcher(localName);
             if (matcher.find() && matcher.groupCount() > 0) {
-                curlyBraces = matcher.group(2);
+                characterAttribute = matcher.group(2);
                 characterName = matcher.group(1);
             }
 
-            tempPathWithoutCurlyBraces.insert(0, "/" + localNameWithoutCurlyBraces);
+            tempPathWithoutAttribute.insert(0, "/" + localNameWithoutAttribute);
         }
 
         if (!hasFamilyName) {
             character = characterFinder.findByFirstName(characterName);
-            if (curlyBraces != null && curlyBraces.equals("Nemesis")) {
+            if (characterAttribute != null && characterAttribute.equals("Nemesis")) {
                 return character.getNemesis();
             }
             return character;
@@ -113,12 +113,12 @@ public class CharacterDataParser {
 
         var filteredCharacters = characterFinder.findFamilyByLastName(familyName);
         if (!filteredCharacters.isEmpty()) {
-            var names = Arrays.stream(tempPathWithoutCurlyBraces.toString().split("/")).filter(n -> !n.isEmpty()).toList();
+            var names = Arrays.stream(tempPathWithoutAttribute.toString().split("/")).filter(n -> !n.isEmpty()).toList();
             if (names.size() == 2) {
                 var firstName = names.get(1);
                 character = filteredCharacters.stream().filter(c -> Objects.equals(c.firstName, firstName)).findFirst().orElse(null);
             }
-            if (character != null && curlyBraces != null && curlyBraces.equals("Nemesis")) {
+            if (character != null && characterAttribute != null && characterAttribute.equals("Nemesis")) {
                 return character.getNemesis();
             }
         }

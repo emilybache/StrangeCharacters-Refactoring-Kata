@@ -49,6 +49,7 @@ public class CharactersTest
             new Character("Mindflayer"),
             new Character("Demagorgon"),
             new Character("Demadog"),
+            new Character("MrWhatsit"),
         }, monsters);
     }
 
@@ -72,6 +73,7 @@ public class CharactersTest
             new Character("Nancy", "Wheeler"),
             new Character("Mike", "Wheeler"),
             new Character("Karen", "Wheeler"),
+            new Character("Holly", "Wheeler"),
         }, family);
     }
     

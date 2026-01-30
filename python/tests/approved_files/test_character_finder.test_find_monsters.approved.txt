@@ -1,0 +1,6 @@
+Monsters
+
+0) Character(Mindflayer, None, isMonster:True)
+1) Character(Demagorgon, None, isMonster:True)
+2) Character(Demadog, None, isMonster:True)
+3) Character(MrWhatsit, None, isMonster:True)

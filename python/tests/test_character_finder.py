@@ -1,3 +1,4 @@
+import approvaltests
 import pytest
 
 from character import Character, CharacterFinder
@@ -34,12 +35,7 @@ def test_find_no_parent():
 def test_find_monsters():
     finder = CharacterFinder(CharacterFactory.strange_characters())
     monsters = finder.find_monsters()
-    expected_monsters = [
-        Character("Mindflayer"),
-        Character("Demagorgon"),
-        Character("Demadog"),
-    ]
-    assert all(list(m in monsters for m in expected_monsters))
+    approvaltests.verify_all("Monsters", monsters)
 
 
 def test_find_family():

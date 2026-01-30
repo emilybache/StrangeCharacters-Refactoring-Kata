@@ -1,4 +1,3 @@
 pytest
 approvaltests
-pytest-approvaltests
 coverage

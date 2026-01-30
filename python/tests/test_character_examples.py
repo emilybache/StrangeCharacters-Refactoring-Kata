@@ -23,14 +23,16 @@ def test_character_list():
 
     # Assert
     assert characters_list is not None
-    assert len(characters_list) == 3
+    assert len(characters_list) == 4
     assert any(char.firstName == "Nancy" for char in characters_list)
     assert set(characters_list) == {
         Character("Nancy", "Wheeler"),
         Character("Mike", "Wheeler"),
         Character("Karen", "Wheeler"),
+        Character("Holly", "Wheeler"),
     }
     assert sorted(characters_list, key=lambda char: char.firstName) == [
+        Character("Holly", "Wheeler"),
         Character("Karen", "Wheeler"),
         Character("Mike", "Wheeler"),
         Character("Nancy", "Wheeler"),
